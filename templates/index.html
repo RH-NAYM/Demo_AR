@@ -3,22 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start Camera</title>
+    <title>Camera Stream</title>
     <script>
-        function startCamera() {
-            fetch('/start_camera')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
+        let socket = null;
+        
+        function startStream() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert("Camera access is not supported on your device.");
+                return;
+            }
+
+            // Access the camera
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.autoplay = true;
+                    video.style.width = "100%";
+                    document.getElementById("video-container").appendChild(video);
+
+                    // Setup WebSocket connection
+                    socket = new WebSocket("ws://localhost:8000/ws");
+                    socket.onopen = function () {
+                        console.log("WebSocket connection established");
+                    };
+
+                    // Send video data to server
+                    socket.onmessage = function(event) {
+                        console.log("Message from server: ", event.data);
+                    };
+
+                    // Add more logic here if you need to send video frames to server
                 })
-                .catch(error => {
-                    console.error("Error starting camera:", error);
+                .catch(function(err) {
+                    console.log("Error accessing camera: ", err);
+                    alert("Error accessing camera");
                 });
         }
     </script>
 </head>
 <body>
-    <h1>Start Camera on Local Window</h1>
-    <button onclick="startCamera()">Start Camera</button>
+    <h1>Start Streaming Your Camera</h1>
+    <button onclick="startStream()">Start Camera</button>
+    <div id="video-container"></div>
 </body>
 </html>
