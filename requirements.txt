@@ -1,5 +1,0 @@
-fastapi 
-uvicorn 
-jinja2 
-opencv-python-headless
-opencv-python
