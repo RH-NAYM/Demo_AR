@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IP Camera Live Stream</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .controls {
+            margin: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            margin: 0 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        img {
+            border: 8px solid #333;
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        footer {
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>📷 IP Camera Live Stream</header>
+
+    <div class="controls">
+        <button onclick="startStream()">Start Stream</button>
+        <button onclick="stopStream()">Stop Stream</button>
+    </div>
+
+    <div class="controls">
+        <button onclick="rotateStream(90)">Rotate 90°</button>
+        <button onclick="rotateStream(180)">Rotate 180°</button>
+        <button onclick="rotateStream(270)">Rotate 270°</button>
+        <button onclick="rotateStream(0)">Rotate 0° (Reset)</button>
+    </div>
+
+    <div class="controls">
+        <button onclick="flipStream(0)">Flip Vertical</button>
+        <button onclick="flipStream(1)">Flip Horizontal</button>
+        <button onclick="flipStream(-1)">Flip Both</button>
+    </div>
+
+    <br>
+    <img id="video" src="" width="640" height="480" alt="Live Stream will appear here" />
+
+    <footer>Made with FastAPI | Your local AI overlord 🧠</footer>
+
+    <script>
+        function startStream() {
+            fetch('/start').then(() => {
+                document.getElementById('video').src = '/video';
+            });
+        }
+
+        function stopStream() {
+            fetch('/stop').then(() => {
+                document.getElementById('video').src = '';
+            });
+        }
+
+        function rotateStream(angle) {
+            fetch(`/rotate/${angle}`).then(response => response.json()).then(data => {
+                console.log(data.status);
+            });
+        }
+
+        function flipStream(flipType) {
+            fetch(`/flip/${flipType}`).then(response => response.json()).then(data => {
+                console.log(data.status);
+            });
+        }
+    </script>
+</body>
+</html>
