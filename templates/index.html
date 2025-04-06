@@ -2,18 +2,25 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Simple AR WebApp</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <title>AR Test</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.loaders.min.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <!-- Marker-based AR -->
-        <a-marker preset="hiro">
-            <a-box position="0 0.5 0" material="color: red"></a-box>
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: true; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+        
+        <a-marker type="pattern" url="/static/marker.patt">
+            <a-entity gltf-model="url(/static/model.glb)" scale="0.1 0.1 0.1"></a-entity>
+
+            <!-- <a-box position="0 0.5 0" material="color: red" scale="0.5 0.5 0.5"></a-box> -->
+            <!-- For models:
+            <a-entity gltf-model="url(/static/model.glb)" scale="0.1 0.1 0.1"></a-entity>
+            -->
         </a-marker>
         
-        <!-- Camera configuration -->
         <a-entity camera></a-entity>
     </a-scene>
 </body>
