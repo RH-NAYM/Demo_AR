@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from starlette.requests import Request
 import uvicorn
+
 app = FastAPI()
 
 # Set up templates and static files (for JS/CSS)
@@ -23,13 +24,10 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_text()
             print(f"Received data: {data}")
-            # Add processing for the incoming video data here (if needed)
+            # Here you can process the incoming data (like video frames)
             await websocket.send_text(f"Message text: {data}")
     except WebSocketDisconnect:
         print("Client disconnected")
 
-
-
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=5656)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
